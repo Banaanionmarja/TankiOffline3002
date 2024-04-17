@@ -48,6 +48,9 @@ public class LayerControlls : MonoBehaviour
     // Update is called 50 times per second
     void FixedUpdate()
     {
+        Vector3 currentRotation = rb.rotation.eulerAngles;
+        rb.rotation = Quaternion.Euler(0f, currentRotation.y, 0f);
+
         // käyttäjän nappulanpainelut
         float inptuHorizontal = Input.GetAxis("Horizontal");
         float inputVertical = Input.GetAxis("Vertical");
