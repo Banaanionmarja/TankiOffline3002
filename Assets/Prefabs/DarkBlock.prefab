@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6817399663316330293}
   - component: {fileID: 8066286974548279927}
   m_Layer: 9
-  m_Name: Block
+  m_Name: DarkBlock
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7439f722eb0d0f844a6ffcd5de95d71d, type: 2}
+  - {fileID: 2100000, guid: 51a6c51fd4f7941479bc790c79240980, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -122,4 +122,3 @@ MonoBehaviour:
   damageFlashTime: 1
   damageColor: {r: 1, g: 0.09019608, b: 0, a: 1}
   boom: {fileID: 6749588379562486921, guid: ed291781468e1ef4299b188853913d6f, type: 3}
-  material: {fileID: 2100000, guid: 7439f722eb0d0f844a6ffcd5de95d71d, type: 2}

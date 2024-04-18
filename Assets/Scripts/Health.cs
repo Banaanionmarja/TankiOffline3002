@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Health : MonoBehaviour
@@ -14,9 +15,11 @@ public class Health : MonoBehaviour
     private Color originalColor;
     private Color originalEmissionColor;
     private float t;
+    private bool dead;
 
     private MeshRenderer[] meshRenderers;
-   
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -25,14 +28,34 @@ public class Health : MonoBehaviour
         meshRenderers = GetComponentsInChildren<MeshRenderer>();
         originalColor = meshRenderers[0].material.color;
         originalEmissionColor = meshRenderers[0].material.GetColor("_EmissionColor");
+
+        /* 
+        if (gameObject.CompareTag("Player"))
+        {
+            GameController.instance.SetHealth(currentHealth, maxHp);
+        } 
+        */
     }
 
     public void ReduceHealth(float damage)
     {
         StartCoroutine(DamageFlash());
         currentHealth -= damage;
-        if (currentHealth <= 0)
+
+        // if (gameObject.CompareTag("Player"))
+        // {
+        //     GameController.instance.SetHealth(currentHealth, maxHp);
+        // }
+
+
+        if (currentHealth <= 0 && !dead)
         {
+            dead = true;
+            if(gameObject.CompareTag("Enemy"))
+            {
+                GameController.instance.EnemyDestroyed();
+            }
+
             Instantiate(boom, transform.position, new Quaternion());
             Destroy(gameObject);
         }

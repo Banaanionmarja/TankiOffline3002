@@ -65,7 +65,6 @@ public class AIControlls : MonoBehaviour
         }
 
 
-
         // etsit‰‰n pelaaja
         if (targetObject != null)
         {
