@@ -11,7 +11,7 @@ public class AIControlls : MonoBehaviour
     public float fireCooldown;
     public float detectRange;
     public float stoppingRange;
-    public float switchTargetDistance;
+    public float switchTargetRange;
     public float switchDistance;
 
     public float AIDelay;
@@ -51,8 +51,18 @@ public class AIControlls : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        t -= Time.deltaTime;
+
         Vector3 currentRotation = rb.rotation.eulerAngles;
         rb.rotation = Quaternion.Euler(0f, currentRotation.y, 0f);
+
+        if (Vector3.Distance(transform.position, target) < switchTargetRange)
+        {
+            float randomx = Random.Range(-switchDistance, switchDistance);
+            float randomz = Random.Range(-switchDistance, switchDistance);
+
+            target += new Vector3(randomx, 0f, randomz);
+        }
 
 
 
@@ -61,18 +71,27 @@ public class AIControlls : MonoBehaviour
         {
             if(Vector3.Distance(transform.position, targetObject.transform.position) < detectRange)
             {
-                if (!Physics.Linecast(transform.position, targetObject.transform.position))
+                if (!Physics.Linecast(transform.position, targetObject.transform.position, obstacleMask))
                 {
                     target = targetObject.transform.position;
+
+                    // Ampuminen
+                    if(t < 0)
+                    {
+                        GameObject proj = Instantiate(projectile, muzzle.position, muzzle.rotation);
+                        t = fireCooldown;
+                        proj.GetComponent<Projectile>().shooterTag = tag;
+
+                    }
+
+
 
                     if (Vector3.Distance(target, transform.position) < stoppingRange)
                     {
                         nextState = State.stop;
                     }
                 }
-                
             }
-            target = targetObject.transform.position;
 
         }
         else
@@ -80,7 +99,9 @@ public class AIControlls : MonoBehaviour
             targetObject = GameObject.FindGameObjectWithTag("Player");
         }
 
+        Debug.DrawLine(target, transform.position, Color.green);
 
+        // liikkuminen pelaajaa päin
         float angle = Vector3.SignedAngle(transform.forward, target - transform.position, Vector3.up);
 
         if(AIt < 0)
@@ -100,40 +121,54 @@ public class AIControlls : MonoBehaviour
         {
             stringState = "Forward";
 
-            if (angle < 0) Turning(-1f);
-            else if (angle > 0) Turning(1f);
+            if (angle < 0)
+            {
+                Turning(-1f);
+            }
+            else if (angle > 0)
+            {
+                Turning(1f);
+            }
 
             if (Mathf.Abs(angle) < 90)
             {
                 Move(1f);
             }
         }
-        if (state == State.left)
+        else if (state == State.left)
         {
             stringState = "Left";
             Turning(-1f);
             Move(1f);
 
         }
-        if (state == State.right)
+        else if(state == State.right)
         {
             stringState = "Right";
             Turning(1f);
             Move(1f);
 
         }
-        if (state == State.back)
+        else if(state == State.back)
         {
             stringState = "Back";
             Move(-1f);
             nextState = State.forward;
         }
-        if (state == State.stop)
+        else if(state == State.stop)
         {
             stringState = "Stop";
             Move(0f);
             nextState = State.forward;
         }
+
+
+
+        Vector3 targetDirection = target - turret.position;
+        targetDirection.y = 0f;
+        Vector3 turningDirection = Vector3.RotateTowards(turret.forward, targetDirection, turretTurningSpeed * Time.deltaTime, 0f);
+        turret.rotation = Quaternion.LookRotation(turningDirection);
+        
 
     }
 
@@ -207,6 +242,7 @@ public class AIControlls : MonoBehaviour
         {
             return;
         }
+        nextState = State.back;
         state = State.back;
     }
 }
