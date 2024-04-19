@@ -45,7 +45,7 @@ public class LayerControlls : MonoBehaviour
         else t -= Time.deltaTime;
     }
 
-    // Update is called 50 times per second
+    // Update is called ~50 times per second
     void FixedUpdate()
     {
         Vector3 currentRotation = rb.rotation.eulerAngles;

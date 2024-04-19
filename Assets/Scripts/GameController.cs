@@ -35,6 +35,7 @@ public class GameController : MonoBehaviour
         {
             spawner.spawnEnemy();
         }
+
         player = spawner.spawnPlayer();
 
         score = 0f;
@@ -52,13 +53,16 @@ public class GameController : MonoBehaviour
 
         if (currentLives > 0)
         {
-            if (Input.GetButtonDown("Restart"))
+            if (player == null)
             {
-                if (player == null)
+                ui.ShowRespawnScreen();
+
+                if (Input.GetButtonDown("Restart"))
                 {
                     player = spawner.spawnPlayer();
                     currentLives--;
                     ui.SetLives(currentLives, lives);
+                    ui.HideRespawnScreen();
                 }
             }
         }
@@ -84,6 +88,6 @@ public class GameController : MonoBehaviour
         {
             current = 0f;
         }
-        ui.SetHealth(current, maxHealth);
+        ui.SetUIHealth(current, maxHealth);
     }
 }

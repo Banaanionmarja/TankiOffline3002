@@ -10,7 +10,7 @@ public class Projectile : MonoBehaviour
     public float speed;
     public float lifeTime;
     public float radius;
-    public float damage;
+    public float damage = 1f;
 
     public string shooterTag;
     public GameObject Boom;
