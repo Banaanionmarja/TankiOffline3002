@@ -16,6 +16,8 @@ public class LayerControlls : MonoBehaviour
     public Transform muzzle;
     public GameObject projectile;
 
+    public AudioSource audioSource;
+
     private Camera mainCamera;
     private Rigidbody rb;
     private float maxRayDist = 100;
@@ -37,6 +39,7 @@ public class LayerControlls : MonoBehaviour
         {
             if (Input.GetButton("Fire1"))
             {
+                audioSource.Play();
                 GameObject proj = Instantiate(projectile, muzzle.position, muzzle.rotation);
                 t = fireCooldown;
                 proj.GetComponent<Projectile>().shooterTag = tag;

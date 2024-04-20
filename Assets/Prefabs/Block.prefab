@@ -122,4 +122,3 @@ MonoBehaviour:
   damageFlashTime: 1
   damageColor: {r: 1, g: 0.09019608, b: 0, a: 1}
   boom: {fileID: 6749588379562486921, guid: ed291781468e1ef4299b188853913d6f, type: 3}
-  material: {fileID: 2100000, guid: 7439f722eb0d0f844a6ffcd5de95d71d, type: 2}

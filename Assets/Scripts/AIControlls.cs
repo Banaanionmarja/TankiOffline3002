@@ -14,6 +14,8 @@ public class AIControlls : MonoBehaviour
     public float switchTargetRange;
     public float switchDistance;
 
+    public AudioSource audioSource;
+
     public float AIDelay;
 
 
@@ -77,10 +79,11 @@ public class AIControlls : MonoBehaviour
                     // Ampuminen
                     if(t < 0)
                     {
+                        Debug.Log("enemy fire in the hole!");
                         GameObject proj = Instantiate(projectile, muzzle.position, muzzle.rotation);
                         t = fireCooldown;
                         proj.GetComponent<Projectile>().shooterTag = tag;
-
+                        audioSource.Play();
                     }
 
 
@@ -241,7 +244,6 @@ public class AIControlls : MonoBehaviour
         {
             return;
         }
-        nextState = State.back;
         state = State.back;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Transactions;
 using Unity.Collections;
 using UnityEngine;
 
@@ -23,6 +24,8 @@ public class GameController : MonoBehaviour
 
     public UIController ui;
 
+    public AudioSource audioSource;
+
     private void Awake()
     {
         instance = this;
@@ -41,7 +44,7 @@ public class GameController : MonoBehaviour
         score = 0f;
         currentLives = lives;
         currentEnemyAmount = enemyStartingAmount;
-        
+
         ui.SetScore(score);
         ui.SetLives(currentLives, lives);
 
@@ -51,18 +54,31 @@ public class GameController : MonoBehaviour
     void Update()
     {
 
-        if (currentLives > 0)
+        if (player == null)
         {
-            if (player == null)
+            if (currentLives > 0)
             {
                 ui.ShowRespawnScreen();
 
                 if (Input.GetButtonDown("Restart"))
                 {
+                    audioSource.Play();
                     player = spawner.spawnPlayer();
                     currentLives--;
                     ui.SetLives(currentLives, lives);
                     ui.HideRespawnScreen();
+                }
+            }
+            else
+            {
+                ui.ShowEndScreen(score);
+                if (Input.GetButtonDown("Restart"))
+                {
+                    ui.Restart();
+                }
+                if (Input.GetButtonDown("Quit") || Input.GetButtonDown("Cancel"))
+                {
+                    ui.QuitGame();
                 }
             }
         }
@@ -82,12 +98,9 @@ public class GameController : MonoBehaviour
     }
 
 
-    public void SetHealth(float current, float maxHealth)
+    public void SetHealth(float currentHp, float maxHealth)
     {
-        if (current < 0)
-        {
-            current = 0f;
-        }
-        ui.SetUIHealth(current, maxHealth);
+        if (currentHp < 0) currentHp = 0f;
+        ui.SetHealth(currentHp, maxHealth);
     }
 }

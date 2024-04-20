@@ -6,7 +6,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
 
-    public float maxHp = 3f;
+    public float maxHp = 3.0f;
     public float damageFlashTime = 1f;
     public Color damageColor = Color.red;
     public GameObject boom;
@@ -16,6 +16,7 @@ public class Health : MonoBehaviour
     private Color originalEmissionColor;
     private float t;
     private bool dead = false;
+    private AudioSource audioSource;
 
     private MeshRenderer[] meshRenderers;
 
@@ -28,8 +29,9 @@ public class Health : MonoBehaviour
         meshRenderers = GetComponentsInChildren<MeshRenderer>();
         originalColor = meshRenderers[0].material.color;
         originalEmissionColor = meshRenderers[0].material.GetColor("_EmissionColor");
+        audioSource = GetComponent<AudioSource>();
 
-         
+        
         if (gameObject.CompareTag("Player"))
         {
             GameController.instance.SetHealth(currentHealth, maxHp);
@@ -41,12 +43,15 @@ public class Health : MonoBehaviour
     {
         StartCoroutine(DamageFlash());
         currentHealth -= damage;
+        audioSource.Play();
+        
 
+        
         if (gameObject.CompareTag("Player"))
         {
             GameController.instance.SetHealth(currentHealth, maxHp);
         }
-
+        
 
         if (currentHealth <= 0 && !dead)
         {
@@ -66,7 +71,7 @@ public class Health : MonoBehaviour
         t = damageFlashTime;
         while (t > 0)
         {
-            t -= (Time.deltaTime);
+            t -= Time.deltaTime;
 
             Color newColor = Color.Lerp(originalColor, damageColor, t / damageFlashTime);
             Color newEmissionColor = Color.Lerp(originalEmissionColor, damageColor, t / damageFlashTime);
